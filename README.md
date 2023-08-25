@@ -1,3 +1,4 @@
+# README này được viết bằng ChatGPT =)) nhìn ngầu vậy thôi chứ code bằng tay hết đó
 # NORTHWIND-DB-Practice
 
 Welcome to the **NORTHWIND-DB-Practice** repository! This repository is designed to provide a platform for practicing and learning about the Northwind database, a well-known sample database often used for educational purposes and real-world simulations. The Northwind database represents a fictional company's sales and inventory data, making it an excellent resource for honing your database management and querying skills.
