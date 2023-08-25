@@ -15,7 +15,7 @@ ORDER BY CategoryName;
 SELECT dbo.Customers.ContactName,
        dbo.Customers.CompanyName,
        dbo.Customers.ContactTitle,
-	   Phone
+       Phone
 FROM dbo.Customers
 ORDER BY Customers.Phone;
 
@@ -67,9 +67,11 @@ WHERE City = 'Buenos Aires';
 -- [8]
 -- Create a report showing ProductName, UnitPrice, QuantityPerUnit of products 
 -- that are out of stock.
-SELECT ProductName, UnitPrice, QuantityPerUnit
+SELECT ProductName,
+       UnitPrice,
+       QuantityPerUnit
 FROM dbo.Products
-WHERE Discontinued = 1
+WHERE Discontinued = 1;
 
 -- [9]
 -- Create a report showing all the ContactName, Address, City of all customers 
@@ -81,3 +83,21 @@ FROM dbo.Customers
 WHERE Country NOT IN ( 'Germany', 'Mexico', 'Spain' );
 
 
+-- [10]
+-- Create a report showing OrderDate, ShippedDate, CustomerID, Freight 
+--  of all orders placed on 21 May 1997.
+SELECT OrderDate,
+       ShippedDate,
+       CustomerID,
+       Freight
+FROM dbo.Orders
+WHERE OrderDate = '1997-05-21 00:00:00.000';
+
+-- [11]
+-- Create a report showing FirstName, LastName, Country from the employees
+-- not from United States
+SELECT FirstName,
+       LastName,
+       Country
+FROM dbo.Employees
+WHERE NOT Country = 'USA';
