@@ -234,20 +234,166 @@ WHERE s.CompanyName IN ( 'Exotic Liquids', 'Specialty Biscuits', 'Ltd.', 'Escarg
 -- [26]
 -- Create a report that shows the ShipPostalCode, OrderID, OrderDate, RequiredDate, ShippedDate, ShipAddress
 -- of all orders with ShipPostalCode beginning with "98124".
+SELECT ShipPostalCode,
+       OrderID,
+       OrderDate,
+       RequiredDate,
+       ShippedDate,
+       ShipAddress
+FROM dbo.Orders
+WHERE ShipPostalCode LIKE '98124%';
 
 -- [27]
 -- Create a report that shows the ContactName, ContactTitle, CompanyName
 -- of customers that do not have "Sales" in their ContactTitle.
+SELECT ContactName,
+       ContactTitle,
+       CompanyName
+FROM dbo.Customers
+WHERE ContactTitle NOT LIKE '%Sales%';
 
 -- [28]
 -- Create a report that shows the LastName, FirstName, City
 -- of employees in cities other than "Seattle".
+SELECT LastName,
+       FirstName,
+       City
+FROM dbo.Employees
+WHERE City != 'Seattle';
 
 -- [29]
 -- Create a report that shows the CompanyName, ContactTitle, City, Country
 -- of all customers in any city in Mexico or other cities in Spain other than Madrid.
+SELECT CompanyName,
+       ContactTitle,
+       City
+FROM dbo.Customers
+WHERE Country = 'Mexico'
+      OR NOT City = 'Madrid'
+         AND Country = 'Spain';
 
+-- [30]
+SELECT CONCAT(FirstName, ' ', LastName, ' can be reached at x', Extension) AS ContactInfo
+FROM dbo.Employees;
 
+-- [31]
+-- Create a report that shows the ContactName of all customers 
+-- that do not have letter A as the second alphabet in their Contactname.
+SELECT ContactName
+FROM dbo.Customers
+WHERE ContactName NOT LIKE '_A%';
+
+-- [32]
+-- Create a report that shows the average UnitPrice rounded to the next whole number,
+-- total price of UnitsInStock, and maximum number of orders from the products table.
+-- All saved as AveragePrice, TotalStock, and MaxOrder respectively.
+SELECT ROUND(AVG(UnitPrice), 0) AS AveragePrice,
+       SUM(UnitsInStock) AS TotalStock,
+       MAX(UnitsOnOrder) AS MaxOrder
+FROM dbo.Products;
+
+-- [33]
+-- Create a report that shows the SupplierID, CompanyName, CategoryName, ProductName,
+-- and UnitPrice from the products, suppliers, and categories table.
+SELECT s.SupplierID,
+       CompanyName,
+       CategoryName,
+       ProductName,
+       UnitPrice
+FROM dbo.Products p
+    JOIN dbo.Suppliers s
+        ON s.SupplierID = p.SupplierID
+    JOIN dbo.Categories c
+        ON c.CategoryID = p.CategoryID;
+
+-- [34]
+-- Create a report that shows the CustomerID, sum of Freight,
+-- from the orders table with sum of freight greater $200, grouped by CustomerID.
+-- HINT: you will need to use a Groupby and a Having statement.
+SELECT CustomerID,
+       SUM(Freight) AS SumOfFreight
+FROM dbo.Orders
+GROUP BY CustomerID
+HAVING SUM(Freight) > 200
+ORDER BY SumOfFreight ASC;
+
+-- [35]
+-- Create a report that shows the OrderID, ContactName, UnitPrice, Quantity, Discount
+-- from the order details, orders, and customers table with discount given on every purchase.
+SELECT o.OrderID,
+       ContactName,
+       UnitPrice,
+       Quantity,
+       Discount
+FROM dbo.[Order Details] od
+    JOIN dbo.Orders o
+        ON o.OrderID = od.OrderID
+    JOIN dbo.Customers c
+        ON c.CustomerID = o.CustomerID
+WHERE od.Discount != 0;
+
+-- [36]
+-- Create a report that shows the EmployeeID, the LastName and FirstName as employee,
+-- and the LastName and FirstName of who they report to as manager from the employees table sorted by Employee ID.
+-- HINT: This is a SelfJoin.
+SELECT a.EmployeeID,
+       CONCAT(a.FirstName, ' ', a.LastName) AS Employee,
+       CONCAT(b.LastName, ' ', b.FirstName) AS Manager
+FROM dbo.Employees a
+    LEFT JOIN dbo.Employees b
+        ON b.EmployeeID = a.ReportsTo
+ORDER BY a.EmployeeID;
+
+-- [37]
+-- Create a report that shows the average, minimum, and maximum UnitPrice of all products
+-- as AveragePrice, MinimumPrice, and MaximumPrice respectively.
+SELECT AVG(UnitPrice) AS AveragePrice,
+       MIN(UnitPrice) AS MinimumPrice,
+       MAX(UnitPrice) AS MaximumPrice
+FROM dbo.Products;
+
+-- [38]
+-- Create a view named CustomerInfo that shows the CustomerID, CompanyName, ContactName, ContactTitle, Address, City,
+-- Country, Phone, OrderDate, RequiredDate, ShippedDate from the customers and orders table.
+-- HINT: Create a View.
+
+CREATE TABLE CustomerInfo1 AS EDGE;
+GO	
+SELECT c.CustomerID,
+       c.CompanyName,
+       c.ContactName,
+       c.ContactTitle,
+       c.Address,
+       c.City,
+       c.Country,
+       c.Phone,
+       o.OrderDate,
+       o.RequiredDate,
+       o.ShippedDate
+FROM dbo.Customers c
+    JOIN dbo.Orders o
+        ON o.CustomerID = c.CustomerID;
+
+-- [39]
+-- Change the name of the view you created from customerinfo to customer details.
+
+-- [40]
+-- Create a view named ProductDetails that shows the ProductID, CompanyName, ProductName, CategoryName, Description,
+-- QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued from the supplier, products, and
+-- categories tables.
+-- HINT: Create a View.
+
+-- [41]
+-- Drop the customer details view.
+
+-- [42]
+-- Create a report that fetches the first 5 characters of categoryName from the category table
+-- and renames it as ShortInfo.
+
+-- [43]
+-- Create a copy of the shipper table as shippers_duplicate.
+-- Then insert a copy of shippers data into the new table.
+-- HINT: Create a Table, use the LIKE Statement and INSERT INTO statement.
 
 
 
