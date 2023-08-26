@@ -358,7 +358,7 @@ FROM dbo.Products;
 -- HINT: Create a View.
 
 CREATE TABLE CustomerInfo1 AS EDGE;
-GO	
+GO
 SELECT c.CustomerID,
        c.CompanyName,
        c.ContactName,
@@ -382,6 +382,22 @@ FROM dbo.Customers c
 -- QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued from the supplier, products, and
 -- categories tables.
 -- HINT: Create a View.
+SELECT p.ProductID,
+       s.CompanyName,
+       p.ProductName,
+       c.CategoryName,
+       c.Description,
+       p.QuantityPerUnit,
+       p.UnitPrice,
+       p.UnitsInStock,
+       p.UnitsOnOrder,
+       p.ReorderLevel,
+       p.Discontinued
+FROM dbo.Suppliers s
+    JOIN dbo.Products p
+        ON p.SupplierID = s.SupplierID
+    JOIN dbo.Categories c
+        ON c.CategoryID = p.CategoryID;
 
 -- [41]
 -- Drop the customer details view.
@@ -389,12 +405,85 @@ FROM dbo.Customers c
 -- [42]
 -- Create a report that fetches the first 5 characters of categoryName from the category table
 -- and renames it as ShortInfo.
+SELECT SUBSTRING(CategoryName, 1, 5) AS ShortInfo
+FROM dbo.Categories;
 
 -- [43]
 -- Create a copy of the shipper table as shippers_duplicate.
 -- Then insert a copy of shippers data into the new table.
 -- HINT: Create a Table, use the LIKE Statement and INSERT INTO statement.
+-- Create a copy of the shipper table as shippers_duplicate
+-- Create shippers_duplicate table with the same structure as shippers
+CREATE TABLE shippers_duplicate AS EDGE;
+SELECT *
+FROM Shippers
+WHERE 1 = 0;
 
+-- Insert data from shippers into shippers_duplicate
+INSERT INTO dbo.shippers_duplicate()
+VALUES
+(3  );
+SELECT *
+FROM dbo.Shippers;
+
+-- [44]
+SELECT ShipperID,
+       CompanyName,
+       Phone,
+       REPLACE(CONCAT(LOWER(CompanyName), '@gmail.com'), ' ', '') AS Email
+FROM dbo.Shippers;
+
+-- [45]
+-- Create a report that shows the CompanyName and ProductName
+-- from all products in the Seafood category.
+SELECT s.CompanyName,
+       p.ProductName
+FROM dbo.Products p
+    JOIN dbo.Categories c
+        ON c.CategoryID = p.CategoryID
+    JOIN dbo.Suppliers s
+        ON s.SupplierID = p.SupplierID
+WHERE c.CategoryName = 'Seafood';
+
+-- [46]
+-- Create a report that shows the CategoryID, CompanyName, and ProductName
+-- from all products in the CategoryID 5.
+SELECT c.CategoryID,
+       s.CompanyName,
+       p.ProductName
+FROM dbo.Products p
+    JOIN dbo.Categories c
+        ON c.CategoryID = p.CategoryID
+    JOIN dbo.Suppliers s
+        ON s.SupplierID = p.SupplierID
+WHERE c.CategoryID = 5;
+
+-- [47]
+-- Delete the shippers_duplicate table.
+DROP TABLE dbo.shippers_duplicate;
+
+-- [48]
+SELECT LastName,
+       FirstName,
+       Title,
+       CONCAT(DATEDIFF(YEAR, BirthDate, GETDATE()), ' Years') AS Age
+FROM dbo.Employees;
+
+-- [49]
+-- Create a report that shows the CompanyName and total number of orders by customer
+-- renamed as number of orders since December 31, 1994. Show number of Orders greater than 10.
+SELECT c.CompanyName,
+       COUNT(c.CustomerID) AS NumberOfOrders
+FROM dbo.Customers c
+    JOIN dbo.Orders o
+        ON o.CustomerID = c.CustomerID
+WHERE o.OrderDate >= '1994-12-31'
+GROUP BY c.CompanyName
+HAVING COUNT(c.CustomerID) > 10;
+
+-- [50]
+SELECT CONCAT(ProductName,' weighs/is ',QuantityPerUnit,' and cost $', ROUND(UnitPrice,1)) AS ProductInfo
+FROM dbo.Products
 
 
 
